@@ -2,7 +2,8 @@
 " My vim setup
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
-" Reference: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+" Reference 1: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+" Reference 2: https://github.com/WilsonQ1n/VIM_C_IDE
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -19,10 +20,24 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-" vim-one theme
+
+" Theme: vim-one
 Plugin 'rakr/vim-one'
+
 " remove trailing whitespace
 Plugin 'https://github.com/ntpeters/vim-better-whitespace'
+
+" vim-powerline: better status line
+Plugin 'https://github.com/Lokaltog/vim-powerline'
+
+" Nerdtree
+Plugin 'preservim/nerdtree'
+
+" gutentags
+Plugin 'ludovicchabant/vim-gutentags'
+
+" Syntastic
+Plugin 'scrooloose/syntastic'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -50,13 +65,14 @@ filetype plugin indent on
 
 " Enable syntax highlighting
 syntax enable
+syntax on
 
 " Enable 256 colors palette in Gnome Terminal
 if $COLORTERM == 'gnome-terminal'
     set t_Co=256
 endif
 
-" color setting from vim-one
+" color setting
 let g:airline_theme='one'
 colorscheme one
 set background=dark
@@ -77,8 +93,9 @@ endif
 " Always show line number
 set number
 
-" Always show cursoe line
+" Always show cursoe line/column
 set cursorline
+set cursorcolumn
 
 " Always show current position
 set ruler
@@ -156,8 +173,8 @@ autocmd BufWritePre * :%s/\s\+$//e
 " Always show the status line
 set laststatus=2
 " Format the status line
-"set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ Ln\ %l,\ Col\ %c/%L%)
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ Ln\ %l,\ Col\ %c/%L%)
+"set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 
 
 """"""""""""""""""""""""""""""
@@ -174,11 +191,50 @@ set novisualbell
 " auto change the directory to current directory
 set autochdir
 
+" Enable spell check
+set spell
+
 " Enable fold
-set foldenable
-set foldmethod=syntax
-set foldcolumn=0
-setlocal foldlevel=1
+"set foldenable
+"set foldmethod=syntax
+"set foldcolumn=0
+"setlocal foldlevel=1
 " Use space to turn on/off fold
-nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+"nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+
+
+""""""""""""""""""""""""""""""
+" => Plugin Setup
+""""""""""""""""""""""""""""""
+
+"NERD Tree
+nmap <Leader>fl :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+let NERDTreeWinSize=32
+let NERDTreeShowHidden=1
+let NERDTreeMinimalUI=1
+let NERDTreeAutoDeleteBuffer=1
+
+"gutentags
+"Reference: https://zhuanlan.zhihu.com/p/43671939
+" search for the project root directory, when it find these directory, stop searching upward
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.project']
+
+" The name for the generate tags file
+let g:gutentags_ctags_tagfile = '.tags'
+
+" Put the generated tags into ~/.cache/tags directory
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
+" Create ~/.cache/tags if it does not exist
+if !isdirectory(s:vim_tags)
+   silent! call mkdir(s:vim_tags, 'p')
+endif
+
+" Config ctags parameter
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+pxI']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 
