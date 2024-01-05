@@ -202,7 +202,8 @@ set spell
 " Use space to turn on/off fold
 "nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
-
+" Make the scroller work for paste
+set clipboard=unnamed
 """"""""""""""""""""""""""""""
 " => Plugin Setup
 """"""""""""""""""""""""""""""
