@@ -39,6 +39,9 @@ Plugin 'ludovicchabant/vim-gutentags'
 " Syntastic
 Plugin 'scrooloose/syntastic'
 
+"vim-sleuth
+Plugin 'tpope/vim-sleuth'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -127,6 +130,13 @@ set hidden
 " Enable mouse usage (all modes)
 set mouse=a
 
+" use vim default clipboard
+" https://www.cnblogs.com/huahuayu/p/12235242.html
+" Make sure vim support cliboard:
+" > vim --version | grep \"clipboard\"
+" +clipboard: support clipboard
+" -clipboard: not support clipboard. Install gvim will solve the issue
+set clipboard^=unnamed,unnamedplus
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo
@@ -189,10 +199,11 @@ set noerrorbells
 set novisualbell
 
 " auto change the directory to current directory
-set autochdir
+"set autochdir
 
 " Enable spell check
 set spell
+set spell spelllang=en_us
 
 " Enable fold
 "set foldenable
@@ -202,8 +213,6 @@ set spell
 " Use space to turn on/off fold
 "nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
-" Make the scroller work for paste
-set clipboard=unnamed
 """"""""""""""""""""""""""""""
 " => Plugin Setup
 """"""""""""""""""""""""""""""
@@ -229,13 +238,9 @@ let g:gutentags_ctags_tagfile = '.tags'
 " Put the generated tags into ~/.cache/tags directory
 let s:vim_tags = expand('~/.cache/tags')
 let g:gutentags_cache_dir = s:vim_tags
+
 " Create ~/.cache/tags if it does not exist
 if !isdirectory(s:vim_tags)
    silent! call mkdir(s:vim_tags, 'p')
 endif
-
-" Config ctags parameter
-let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-let g:gutentags_ctags_extra_args += ['--c++-kinds=+pxI']
-let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 
